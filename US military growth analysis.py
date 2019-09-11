@@ -6,9 +6,10 @@ Created on Fri Sep  6 10:18:52 2019
 """
 
 import pandas as pd
-#import seaborn as sns
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+
+plt.rcParams.update({'font.size':20,'axes.titlepad':30,'axes.labelpad':20})
 
 file = r'C:\Users\usrsolo\Documents\Rose Random\growth of us military over time raw data.csv'
 data = pd.read_csv(file)
@@ -21,7 +22,7 @@ ax.get_yaxis().set_minor_locator(mpl.ticker.AutoMinorLocator())
 plt.grid(b=True, which='minor', color='k', linewidth=0.1)
 
 plt.bar(data['Year'],data['Military/Pop'])
-plt.title('Percentage of Total US Population in Military Over Time')
+plt.title('Percentage of Total US Population in Military Over Time',bbox=dict(fc="0.9"))
 plt.xlabel('Year')
 plt.ylabel('Percentage of Total US Pop. in Military (%)')
 
@@ -32,6 +33,10 @@ for i in range(len(war_dates)):
     loc = war_dates[i] - data['Year'][0]
     plt.annotate(war_labels[i],
                  xy=(war_dates[i],data['Military/Pop'][loc]),
-                 xytext=(war_dates[i]-2,data['Military/Pop'][loc]+.15),
+                 xytext=(war_dates[i]-4,data['Military/Pop'][loc]+.15),
                  backgroundcolor='w',
-                 bbox=dict(fc="0.99"))
+                 bbox=dict(fc="0.99"),
+                 fontsize=14.5)
+    
+mng = plt.get_current_fig_manager()
+mng.window.showMaximized()
