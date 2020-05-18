@@ -11,16 +11,17 @@ from os import listdir
 import seaborn as sns
 
 #set plot properties
-sns.set(font_scale=3)
+sns.set(font_scale=2.5)
 sns.set_style("whitegrid")
-plt.rcParams.update({'axes.titlepad':35,'axes.labelpad':15,
+plt.rcParams.update({'axes.titlepad':35,'axes.labelpad':12,
                      'font.weight':'bold',
                      'axes.titleweight':'bold','axes.labelweight':'bold',
                      'grid.color':'k','axes.edgecolor':'k',
                      'lines.markersize':30,'lines.linewidth':3,
                      'legend.frameon':True,'legend.framealpha':1})
 
-folder = r'C:\Users\usrsolo\Documents\Rose Random\education attainment stats'
+#folder = r'C:\Users\usrsolo\Documents\Rose Random\education attainment stats'
+folder = r'C:\Users\roses\Desktop\Rose Random\data visualization projects\education attainment stats\education attainment raw data'
 
 #create a plot for a given education attainment level and age group
 def create_plot(ed_attainment,age,fignum):
@@ -44,17 +45,17 @@ def create_plot(ed_attainment,age,fignum):
             else:
                 #need to concatenate two tables of data from excel file
                 a = pd.read_excel(io = file, header=5).iloc[:21]
-                a = a.reset_index()
+                #a = a.reset_index()
                 b = pd.read_excel(io = file, header=38).iloc[:21]
-                b = b.reset_index()
+                #b = b.reset_index()
                 frames = [a,b]
                 df = pd.concat(frames)
                 df = df.reset_index()
                 
             #find the correct key label for the inputted age grop
             age_label= ''
-            for row in range(len(df['index'])):
-                name = str(df['index'][row])
+            for row in range(len(df['Unnamed: 0'])):
+                name = str(df['Unnamed: 0'][row])
                 if age.lower() in name.lower():
                     age_label = row
             total = df['Total'][age_label] #total us pop in age group
@@ -70,7 +71,8 @@ def create_plot(ed_attainment,age,fignum):
     plt.figure(fignum)
     plt.xlabel('Year')
     plt.ylabel('% of US Pop. Aged ' + age)
-    plt.title(ed_attainment + ' Level Education for People Aged ' + age, bbox=dict(fc="0.9"))
+    plt.title(ed_attainment + ' Level Education for People Aged ' + age, 
+              bbox=dict(fc="0.9",edgecolor="k"))
     plt.plot(time,stats,'.-')
     mng = plt.get_current_fig_manager()
     mng.window.showMaximized()  
@@ -97,17 +99,17 @@ def degree_check(age,fignum):
             else:
                 #need to concatenate two tables of data from excel file
                 a = pd.read_excel(io = file, header=5).iloc[:21]
-                a = a.reset_index()
+                #a = a.reset_index()
                 b = pd.read_excel(io = file, header=38).iloc[:21]
-                b = b.reset_index()
+                #b = b.reset_index()
                 frames = [a,b]
                 df = pd.concat(frames)
                 df = df.reset_index()
                 
             #find the correct key label for the inputted age grop
             age_label= ''
-            for row in range(len(df['index'])):
-                name = str(df['index'][row])
+            for row in range(len(df['Unnamed: 0'])):
+                name = str(df['Unnamed: 0'][row])
                 if age.lower() in name.lower():
                     age_label = row
             total = df['Total'][age_label] #total us pop in age group
@@ -135,7 +137,8 @@ def degree_check(age,fignum):
     plt.figure(fignum)
     plt.xlabel('Year')
     plt.ylabel('% of US Pop. Aged ' + age)
-    plt.title('Post-Secondary Education for People Aged ' + age, bbox=dict(fc="0.9"))
+    plt.title('Post-Secondary Education for People Aged ' + age, 
+              bbox=dict(fc="0.9",edgecolor="k"))
     plt.plot(time,stats[0],'.-')
     plt.plot(time,stats[1],'.-')
     plt.plot(time,stats[2],'.-')
@@ -144,20 +147,34 @@ def degree_check(age,fignum):
                 'All post-secondary degrees',
                 'Bachelor, master, doctorate degrees'])
     mng = plt.get_current_fig_manager()
-    mng.window.showMaximized()   
+    mng.window.showMaximized()  
     
-ed_attainment = 'Some College'
+ed_attainment = 'Master'
 age = '25 Years and Over'
 create_plot(ed_attainment,age,1)
+
+ed_attainment = 'Master'
 age = '25 to 29 Years'
 create_plot(ed_attainment,age,2)
-ed_attainment = 'Bachelor'
-age = '25 Years and Over'
-create_plot(ed_attainment,age,3)
-age = '25 to 29 Years'
-create_plot(ed_attainment,age,4)
-    
+
 age = '25 Years and Over'
 degree_check(age,5)
-age = '25 to 29 Years'
-degree_check(age,6)
+    
+run = False
+if run:
+    
+    ed_attainment = 'Some College'
+    age = '25 Years and Over'
+    create_plot(ed_attainment,age,1)
+    age = '25 to 29 Years'
+    create_plot(ed_attainment,age,2)
+    ed_attainment = 'Bachelor'
+    age = '25 Years and Over'
+    create_plot(ed_attainment,age,3)
+    age = '25 to 29 Years'
+    create_plot(ed_attainment,age,4)
+        
+    age = '25 Years and Over'
+    degree_check(age,5)
+    age = '25 to 29 Years'
+    degree_check(age,6)
