@@ -17,7 +17,7 @@ plt.rcParams.update({'axes.titlepad':35,'axes.labelpad':10,
                       'grid.color':'w','axes.edgecolor':'w','axes.grid':True,
                       'axes.facecolor':[.75,.75,.75],
                       'lines.markersize':12,'legend.frameon':True,
-                      'legend.framealpha':1})
+                      'legend.framealpha':1,'legend.facecolor':'w'})
 
 #open file from cwd and parse data into dataframe
 cwd = getcwd()
@@ -40,6 +40,15 @@ ax.set_xticklabels(labels,fontsize=14)
 ax.set_axisbelow(True)
 plt.title('Where Did Shakespeare Set His Plays?',bbox=dict(fc="0.9"))
 plt.ylabel('Number of Shakespeare Plays \n per Country Setting')
-    
 
-    
+#plot number of plays grouped by country setting stacked by genre 
+ax = df.groupby(['Country (modern)', 'Genre'])['Title'].count().unstack(
+    ).plot(kind='bar', rot = 45, stacked=True)
+mng = plt.get_current_fig_manager()
+mng.window.showMaximized() 
+labels = ax.get_xticklabels()
+labels[4].set_text('Fictional \n country')
+ax.set_xticklabels(labels,fontsize=14)
+ax.set_axisbelow(True)
+plt.title('Where Did Shakespeare Set His Plays?',bbox=dict(fc="0.9"))
+plt.ylabel('Number of Shakespeare Plays \n per Country Setting')   
