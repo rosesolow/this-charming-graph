@@ -12,18 +12,18 @@ import numpy as np
 #import scipy
 
 #set plotting params
-sns.set(font_scale=2)
-#sns.set_style("whitegrid")
-plt.rcParams.update({'axes.titlepad':25,'axes.labelpad':10,
+#sns.set(font_scale=2)
+sns.set_style("darkgrid")
+
+plt.rcParams.update({'axes.titlepad':15,'axes.labelpad':5,
                      'font.weight':'bold',
                      'axes.titleweight':'bold','axes.labelweight':'bold',
-                     'grid.color':'k','axes.edgecolor':'k',
                      'lines.markersize':15,'lines.linewidth':3,
                      'legend.frameon':True,'legend.framealpha':1,
                      'legend.facecolor':'w'})
 
 #import data
-file = r'C:\Users\roses\Desktop\Rose Random\data visualization projects\tax filing season analysis\irstaxfilingseasondata.csv'
+file = r'C:\Users\RoseSolow\Downloads\irstaxfilingseasondata.csv'
 dtypes = {'Week Ending Date':'str'}
 data = pd.read_csv(file,dtype=dtypes,parse_dates=['Week Ending Date'])
 data['Returns'] = [x/1000000 for x in data['Returns']]
@@ -66,6 +66,32 @@ for w in range(len(fweeks)):
     for y in years:
         returnsperfweek.append(df[y][w])
     fweekavgs.append(np.nanmean(returnsperfweek))
+
+df_new = df[:][1:16].copy()
+for y in years:
+    total = df_new[y].sum()
+    for i in range(1,16):
+        df_new[y][i] = df_new[y][i]/total
+df_new['avg'] = df_new[years].mean(axis=1)
+        
+#plot returns % per filing week for each year and average % returns per filing
+#week for weeks -10 to 4
+fig, ax = plt.subplots()
+mng = plt.get_current_fig_manager()
+mng.window.showMaximized() 
+for y in years:
+    color = (years[0] - y + 5)/15
+    plt.plot(fweeks[1:16],df_new[y],'.',c=[color,color,color])
+plt.plot(fweeks[1:16],df_new['avg'],'.-')
+labels = years.copy()
+labels.append('Average')
+plt.legend(labels)
+plt.xlabel('Filing Week (No. of Weeks Before or After Deadline)')
+plt.ylabel('Returns Received per Week (as percentage of total returns)')
+plt.title('When Do We File Our Taxes?\n(IRS Data 2012-2020)',
+          bbox=dict(fc="0.9"))
+plt.text(.025,.825,'Week 0 Denotes Week of \nFiling Deadline (Apr 15)',
+             bbox=dict(facecolor='w'),transform=ax.transAxes)
     
 #plot returns per filing week for each year and average returns per filing
 #week for weeks -10 to 4
